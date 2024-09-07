@@ -33,6 +33,19 @@ export const FormContact = () => {
     });
   };
 
+  // const resetTurnstile = useCallback(() => {
+  //   if (turnstileRef.current && typeof turnstileRef.current.reset === "function") {
+  //     turnstileRef.current.reset();
+  //   }
+  //   setTurnstileToken(null);
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!turnstileRef.current) {
+  //     console.warn("Turnstile ref is not yet assigned");
+  //   }
+  // }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,15 +59,25 @@ export const FormContact = () => {
     setErrors(newErrors);
     console.log(formData);
 
-    if (!Object.values(newErrors).some((error) => error !== '') && turnstileToken) {
-      console.log('Formulario enviado con éxito');
-      turnstileRef.current.reset();
-      setTurnstileToken(null);
+    if (!Object.values(newErrors).some((error) => error !== "") && turnstileToken) {
+      console.log("Formulario enviado con éxito");
+      // resetTurnstile();
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
     }
   };
 
   const areAllFieldsFilled = () => {
-    return Object.values(formData).every((value) => value.trim() !== '');
+    return (
+      formData.name.trim() !== '' &&
+      formData.email.trim() !== '' &&
+      formData.message.trim() !== '' &&
+      turnstileToken !== null
+    );
   };
   return (
     <section className="bg-white flex w-full">
