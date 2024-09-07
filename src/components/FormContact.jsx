@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ContactImage from '@/assets/images/contact-image.webp';
 import { Input } from './ui/Input';
 // import axios from 'axios';
 import { TextArea } from './ui/TextArea';
 import Image from 'next/image';
+import Turnstile from 'react-turnstile';
 
 export const FormContact = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,8 @@ export const FormContact = () => {
     message: '',
   });
 
+  const [turnstileToken, setTurnstileToken] = useState(null);
+  const turnstileRef = useRef(null);
   // const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const handleInputChange = async (e) => {
@@ -43,21 +46,11 @@ export const FormContact = () => {
     setErrors(newErrors);
     console.log(formData);
 
-    // if (!Object.values(newErrors).some((error) => error !== '')) {
-    //   try {
-    //     const res = await axios.post('/api/send', formData);
-
-    //     if (res.status === 200) {
-    //       console.log('Mensaje enviado correctamente');
-    //       setFormData({ name: '', email: '', phone: '', message: '' });
-    //       // setIsFormSubmitted(true);
-    //     } else {
-    //       console.log('Error al enviar el mensaje');
-    //     }
-    //   } catch (err) {
-    //     console.error('Error:', err);
-    //   }
-    // }
+    if (!Object.values(newErrors).some((error) => error !== '') && turnstileToken) {
+      console.log('Formulario enviado con éxito');
+      turnstileRef.current.reset();
+      setTurnstileToken(null);
+    }
   };
 
   const areAllFieldsFilled = () => {
@@ -109,11 +102,18 @@ export const FormContact = () => {
             error={errors.message}
             onChange={handleInputChange}
           />
+          <Turnstile
+            sitekey="0x4AAAAAAAf6djTtczCLprdy"
+            onVerify={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken(null)}
+            ref={turnstileRef}
+          />
           <button
             type="submit"
             className={`rounded-md text-center font-bold text-sm w-full py-[15px] text-white transition-colors ${
-              areAllFieldsFilled() ? 'bg-slate-200' : 'bg-[#0063A5]'
+              areAllFieldsFilled() ? 'bg-[#0063A5]' : 'bg-slate-200'
             } focus:outline-none`}
+            disabled={!areAllFieldsFilled()}
           >
             Enviar
           </button>
