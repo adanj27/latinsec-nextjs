@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import ContactImage from '@/assets/images/contact-image.webp';
 import { Input } from './ui/Input';
-// import axios from 'axios';
+import axios from 'axios';
 import { TextArea } from './ui/TextArea';
 import Image from 'next/image';
 import Turnstile from 'react-turnstile';
@@ -24,7 +24,6 @@ export const FormContact = () => {
 
   const [turnstileToken, setTurnstileToken] = useState(null);
   const turnstileRef = useRef(null);
-  // const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const handleInputChange = async (e) => {
     setFormData({
@@ -32,19 +31,6 @@ export const FormContact = () => {
       [e.target.name]: e.target.value,
     });
   };
-
-  // const resetTurnstile = useCallback(() => {
-  //   if (turnstileRef.current && typeof turnstileRef.current.reset === "function") {
-  //     turnstileRef.current.reset();
-  //   }
-  //   setTurnstileToken(null);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!turnstileRef.current) {
-  //     console.warn("Turnstile ref is not yet assigned");
-  //   }
-  // }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,17 +43,20 @@ export const FormContact = () => {
     };
 
     setErrors(newErrors);
-    console.log(formData);
 
     if (!Object.values(newErrors).some((error) => error !== "") && turnstileToken) {
-      console.log("Formulario enviado con éxito");
-      // resetTurnstile();
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
+      try {
+        const res = await axios.post("/api/send", formData);
+
+        if (res.status === 200) {
+          console.log("Mensaje enviado correctamente");
+          setFormData({ name: "", email: "", phone: "", message: "" });
+        } else {
+          console.log("Error al enviar el mensaje");
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      }
     }
   };
 
