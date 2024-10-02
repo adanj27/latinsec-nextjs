@@ -3,10 +3,11 @@
 import { useRef, useState } from 'react';
 import ContactImage from '@/assets/images/contact-image.webp';
 import { Input } from './ui/Input';
-import axios from 'axios';
+// import axios from 'axios';
 import { TextArea } from './ui/TextArea';
 import Image from 'next/image';
 import Turnstile from 'react-turnstile';
+import emailjs from '@emailjs/browser';
 
 export const FormContact = () => {
   const [formData, setFormData] = useState({
@@ -46,9 +47,14 @@ export const FormContact = () => {
 
     if (!Object.values(newErrors).some((error) => error !== "") && turnstileToken) {
       try {
-        const res = await axios.post("/api/send", formData);
+        const result = await emailjs.sendForm(
+          'service_k3zxjvg',
+          'template_mzu0o45',
+          form.current,
+          'yqqUqtFZcCX7uVfoi'
+        );
 
-        if (res.status === 200) {
+        if (result.text === 'OK') {
           console.log("Mensaje enviado correctamente");
           setFormData({ name: "", email: "", phone: "", message: "" });
         } else {
