@@ -10,6 +10,7 @@ import Turnstile from 'react-turnstile';
 import emailjs from '@emailjs/browser';
 
 export const FormContact = () => {
+  const form = useRef();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
