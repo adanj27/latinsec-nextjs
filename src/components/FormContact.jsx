@@ -25,7 +25,7 @@ export const FormContact = () => {
   });
 
   const [turnstileToken, setTurnstileToken] = useState(null);
-  const turnstileRef = useRef(null);
+  // const turnstileRef = useRef(null);
 
   const handleInputChange = async (e) => {
     setFormData({
@@ -125,7 +125,7 @@ export const FormContact = () => {
             sitekey="0x4AAAAAAAf6djTtczCLprdy"
             onVerify={(token) => setTurnstileToken(token)}
             onExpire={() => setTurnstileToken(null)}
-            ref={turnstileRef}
+            // ref={turnstileRef}
           />
           <button
             type="submit"
