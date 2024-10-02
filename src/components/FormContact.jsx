@@ -80,12 +80,12 @@ export const FormContact = () => {
       <div className="w-[364px] hidden lg:flex">
         <Image src={ContactImage} alt="" className="object-cover" />
       </div>
-      <form onSubmit={handleSubmit} className="px-[50px] py-[40px] lg:w-2/3 w-full">
+      <form ref={form} onSubmit={handleSubmit} className="px-[50px] py-[40px] lg:w-2/3 w-full">
         <h4 className="font-bold text-[40px] text-[#252B42]">Contacto</h4>
         <div className="w-full">
           <Input
             label="Nombre*"
-            name="name"
+            name="from_name"
             type="text"
             required
             value={formData.name}
@@ -95,7 +95,7 @@ export const FormContact = () => {
           />
           <Input
             label="Email*"
-            name="email"
+            name="from_email"
             type="email"
             required
             value={formData.email}
@@ -105,7 +105,7 @@ export const FormContact = () => {
           />
           <Input
             label="Teléfono"
-            name="phone"
+            name="phone_number"
             type="tel"
             value={formData.phone}
             placeholder="(123) 123456"
