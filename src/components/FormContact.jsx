@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react';
 import ContactImage from '@/assets/images/contact-image.webp';
 import { Input } from './ui/Input';
-// import axios from 'axios';
 import { TextArea } from './ui/TextArea';
 import Image from 'next/image';
 import Turnstile from 'react-turnstile';
@@ -12,26 +11,26 @@ import emailjs from '@emailjs/browser';
 export const FormContact = () => {
   const form = useRef();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
+    user_name: '',
+    user_email: '',
+    user_phone: '',
     message: '',
   });
 
   const [errors, setErrors] = useState({
-    name: '',
-    email: '',
+    user_name: '',
+    user_email: '',
     message: '',
   });
 
   const [turnstileToken, setTurnstileToken] = useState(null);
-  // const turnstileRef = useRef(null);
 
-  const handleInputChange = async (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -39,8 +38,8 @@ export const FormContact = () => {
 
     const errorMessage = 'Este campo es obligatorio';
     const newErrors = {
-      name: formData.name ? '' : errorMessage,
-      email: formData.email ? '' : errorMessage,
+      user_name: formData.user_name ? '' : errorMessage,
+      user_email: formData.user_email ? '' : errorMessage,
       message: formData.message ? '' : errorMessage,
     };
 
@@ -57,7 +56,12 @@ export const FormContact = () => {
 
         if (result.text === 'OK') {
           console.log("Mensaje enviado correctamente");
-          setFormData({ name: "", email: "", phone: "", message: "" });
+          setFormData({
+            user_name: '',
+            user_email: '',
+            user_phone: '',
+            message: '',
+          });
         } else {
           console.log("Error al enviar el mensaje");
         }
@@ -69,12 +73,13 @@ export const FormContact = () => {
 
   const areAllFieldsFilled = () => {
     return (
-      formData.name.trim() !== '' &&
-      formData.email.trim() !== '' &&
+      formData.user_name.trim() !== '' &&
+      formData.user_email.trim() !== '' &&
       formData.message.trim() !== '' &&
       turnstileToken !== null
     );
   };
+
   return (
     <section className="bg-white flex w-full">
       <div className="w-[364px] hidden lg:flex">
@@ -85,29 +90,29 @@ export const FormContact = () => {
         <div className="w-full">
           <Input
             label="Nombre*"
-            name="from_name"
+            name="user_name"
             type="text"
             required
-            value={formData.name}
+            value={formData.user_name}
             placeholder="Nombre"
-            error={errors.name}
+            error={errors.user_name}
             onChange={handleInputChange}
           />
           <Input
             label="Email*"
-            name="from_email"
+            name="user_email"
             type="email"
             required
-            value={formData.email}
+            value={formData.user_email}
             placeholder="ejemplo@latinsec.com"
-            error={errors.email}
+            error={errors.user_email}
             onChange={handleInputChange}
           />
           <Input
             label="Teléfono"
-            name="phone_number"
+            name="user_phone"
             type="tel"
-            value={formData.phone}
+            value={formData.user_phone}
             placeholder="(123) 123456"
             pattern="[0-9]*"
             onChange={handleInputChange}
@@ -125,7 +130,6 @@ export const FormContact = () => {
             sitekey="0x4AAAAAAAf6djTtczCLprdy"
             onVerify={(token) => setTurnstileToken(token)}
             onExpire={() => setTurnstileToken(null)}
-            // ref={turnstileRef}
           />
           <button
             type="submit"
