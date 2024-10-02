@@ -11,15 +11,15 @@ import emailjs from '@emailjs/browser';
 export const FormContact = () => {
   const form = useRef();
   const [formData, setFormData] = useState({
-    user_name: '',
-    user_email: '',
-    user_phone: '',
+    from_name: '',
+    from_email: '',
+    phone_number: '',
     message: '',
   });
 
   const [errors, setErrors] = useState({
-    user_name: '',
-    user_email: '',
+    from_name: '',
+    from_email: '',
     message: '',
   });
 
@@ -38,8 +38,8 @@ export const FormContact = () => {
 
     const errorMessage = 'Este campo es obligatorio';
     const newErrors = {
-      user_name: formData.user_name ? '' : errorMessage,
-      user_email: formData.user_email ? '' : errorMessage,
+      from_name: formData.from_name ? '' : errorMessage,
+      from_email: formData.from_email ? '' : errorMessage,
       message: formData.message ? '' : errorMessage,
     };
 
@@ -57,9 +57,9 @@ export const FormContact = () => {
         if (result.text === 'OK') {
           console.log("Mensaje enviado correctamente");
           setFormData({
-            user_name: '',
-            user_email: '',
-            user_phone: '',
+            from_name: '',
+            from_email: '',
+            phone_number: '',
             message: '',
           });
         } else {
@@ -73,8 +73,8 @@ export const FormContact = () => {
 
   const areAllFieldsFilled = () => {
     return (
-      formData.user_name.trim() !== '' &&
-      formData.user_email.trim() !== '' &&
+      formData.from_name.trim() !== '' &&
+      formData.from_email.trim() !== '' &&
       formData.message.trim() !== '' &&
       turnstileToken !== null
     );
@@ -90,29 +90,29 @@ export const FormContact = () => {
         <div className="w-full">
           <Input
             label="Nombre*"
-            name="user_name"
+            name="from_name"
             type="text"
             required
-            value={formData.user_name}
+            value={formData.from_name}
             placeholder="Nombre"
-            error={errors.user_name}
+            error={errors.from_name}
             onChange={handleInputChange}
           />
           <Input
             label="Email*"
-            name="user_email"
+            name="from_email"
             type="email"
             required
-            value={formData.user_email}
+            value={formData.from_email}
             placeholder="ejemplo@latinsec.com"
-            error={errors.user_email}
+            error={errors.from_email}
             onChange={handleInputChange}
           />
           <Input
             label="Teléfono"
-            name="user_phone"
+            name="phone_number"
             type="tel"
-            value={formData.user_phone}
+            value={formData.phone_number}
             placeholder="(123) 123456"
             pattern="[0-9]*"
             onChange={handleInputChange}
