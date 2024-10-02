@@ -48,10 +48,10 @@ export const FormContact = () => {
     if (!Object.values(newErrors).some((error) => error !== "") && turnstileToken) {
       try {
         const result = await emailjs.sendForm(
-          'service_k3zxjvg',
-          'template_mzu0o45',
+          'Service ID',
+          'template_ij297z7',
           form.current,
-          'yqqUqtFZcCX7uVfoi'
+          'FNs2ig-8WOcs3Fjaj'
         );
 
         if (result.text === 'OK') {
